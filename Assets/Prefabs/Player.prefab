@@ -212,7 +212,7 @@ MonoBehaviour:
   rotationSpeed: 80
   movementInput: 0
   rotationInput: 0
-  isHuman: 1
+  isHuman: 0
   player: {fileID: 44509575592068492}
 --- !u!114 &44509575592068490
 MonoBehaviour:

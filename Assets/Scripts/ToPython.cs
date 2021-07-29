@@ -21,7 +21,6 @@ public class ToPython : MonoBehaviour
     bool running;
     byte[] data_sent;
     public bool reset;
-    int counter = 0;
     PlayerMovement movementScript;
 
     private void Update()
@@ -73,18 +72,13 @@ public class ToPython : MonoBehaviour
         //---receiving Data from the Host----
         nwStream.Read(buffer, 0, client.ReceiveBufferSize); //Getting data in Bytes from Python
         inputVal[0] = BitConverter.ToSingle(buffer.SubArray(0,4),0);
+
         inputVal[1] = BitConverter.ToSingle(buffer.SubArray(4, 4),0);
         reset = Convert.ToBoolean(buffer[8]);
-        if (!buffer.Equals(new byte[0]))
-        {
-            counter++;
-            movementScript.UseInput();
-            movementScript.Movement();
-            Debug.Log(counter);
-        }
+        movementScript.receivedData = true;
         //---Sending Data to Host----
         data_sent[0] = (byte)(GoalScript.done ? 1 : 0);
-        nwStream.Write(data_sent, 0, data_sent.Length); //Sending the data in Bytes to Python
+        nwStream.Write(data_sent, 0, data_sent.Length);
     }
     public float[] getAgentInput()
     {

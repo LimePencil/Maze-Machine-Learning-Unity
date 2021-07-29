@@ -13,6 +13,7 @@ public class PlayerMovement : MonoBehaviour
     public Rigidbody player;
     private GameObject playerObj;
     private Vector3 spawnPoint;
+    public bool receivedData = false;
     ToPython py;
     void Start()
     {
@@ -30,14 +31,16 @@ public class PlayerMovement : MonoBehaviour
             movementInput = Input.GetAxis("Vertical");
             rotationInput = Input.GetAxis("Horizontal");
         }
+        UseInput();
     }
     public void UseInput()
     {
-        if(!isHuman)
+        if(!isHuman && receivedData)
         {
             float[] arr = py.getAgentInput();
             movementInput = arr[0];
             rotationInput = arr[1];
+            receivedData = false;
         }
         if (py.reset)
         {
@@ -46,16 +49,17 @@ public class PlayerMovement : MonoBehaviour
             py.reset = false;
         }
     }
-    public void Movement()
-    {
-        Move();
-        Rotate();
-    }
 
     private void FixedUpdate()
     {
+        if(movementInput!= 0)
+        {
+            Debug.Log(movementInput);
+        }
         Move();
         Rotate();
+        movementInput = 0;
+        rotationInput = 0;
     }
     private void Move()
     {
